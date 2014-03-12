@@ -51,7 +51,7 @@ body,html {
 	margin: -16px auto auto -16px;
 	background-image: url(assets/loading.gif);
 }
-canvas{
+.canvas{
 	display:none;
 	position: absolute; 
 	z-index: 0;
@@ -62,13 +62,28 @@ canvas{
 	margin: -250px auto auto -375px;
 	
 }
+video{
+	display:none;
+	position: absolute; 
+	z-index: 0;
+	left: 50%;
+	top: 50%;
+	width: 150px;
+	height: 100px;
+	margin: -250px auto auto -375px;
+	
+}
 </style>
 <title>Fruit Ninja HTML5 Canvas</title>
 <script src="js/libs/preloadjs-0.3.0.min.js"></script>
 <script src="js/libs/soundjs-0.4.0.min.js"></script>
 <script src="js/libs/TweenLite.min.js"></script>
 <script src="js/libs/EasePack.min.js"></script>
-<script src="../../build/spp.min.js"></script>
+<script src="js/libs/spp.min.js"></script>
+<script src="js/libs/dat.gui.min.js"></script>
+<script src="js/libs/Stats.js"></script>
+<script src="js/libs/utils.js"></script>
+
 <script src="js/src/FruitGame.js"></script>
 <script src="js/src/Assets.js"></script>
 <script src="js/src/AssetsManager.js"></script>
@@ -80,13 +95,20 @@ canvas{
 <script src="js/src/Module_blade.js"></script>
 <script src="js/src/Module_ui.js"></script>
 <script src="js/src/Main.js"></script>
+<script src="js/src/ShadowRenderer.js"></script>
+<script src="js/src/HandTracking.js"></script>
+<script type="text/javascript" src="js-handtracking/src/cv.js"></script> 
+<script type="text/javascript" src="js-handtracking/src/handtracking.js"></script> 
 </head>
 <body>
 <a id="fork" href="https://github.com/flashhawk" target="_blank"></a>
-<div id="info" style="display:none">Fruit Ninja for HTML5 canvas,Developed using the <a href="https://github.com/flashhawk/spp.js" target="_blank"> spp.js </a>open source engine。<a href="https://github.com/flashhawk/spp.js/tree/master/examples/FruitNinja" target="_blank">source download</a></div>
-<canvas id="bottom" style="display:none">Your borwser does not suport html5 canvans!</canvas>
-<canvas id="middle" style="display:none">Your borwser does not suport html5 canvans!</canvas>
-<canvas id="top" style="display:none">Your borwser does not suport html5 canvans!</canvas>
+<div id="info" style="display:none">Fruit Ninja for HTML5 canvas,Developed using the <a href="https://github.com/flashhawk/spp.js" target="_blank"> spp.js </a>open source engine。<a href="https://github.com/flashhawk/spp.js/tree/master/examples/FruitNinja" target="_blank">source download</a>. Powered with <a href="https://www.w3.org/wiki/Media_Capture_Depth_Stream_Extension" target="_blank">Depth Stream API</a></div>
+<canvas class="canvas" id="bottom" style="display:none">Your borwser does not suport html5 canvans!</canvas>
+<canvas class="canvas" id="shadow" style="display:none">Your borwser does not suport html5 canvans!</canvas>
+<canvas class="canvas" id="middle" style="display:none">Your borwser does not suport html5 canvans!</canvas>
+<canvas class="canvas" id="top" style="display:none">Your borwser does not suport html5 canvans!</canvas>
+<canvas id="canvas" style="width:320px; height:240px; border:1px solid black; display:none" width="320" height="240" style="display:none"></canvas>
 <div id="loading" style="display:block" ></div>
+<video id="depth" autoplay="true" style="display:none;" src=""></video>
 </body>
 </html>

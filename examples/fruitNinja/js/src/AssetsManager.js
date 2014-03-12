@@ -56,4 +56,3 @@ FruitGame.AssetsManager=function()
 		return this.fruitsArray[this.fruitsArray.length*Math.random()>>0];
 	};
 };
-SPP.inherit(FruitGame.AssetsManager,SPP.EventDispatcher);

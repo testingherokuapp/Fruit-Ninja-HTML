@@ -1,0 +1,3 @@
+[submodule "examples/fruitNinja/js-handtracking"]
+	path = examples/fruitNinja/js-handtracking
+	url = https://github.com/ak48disk/js-handtracking.git

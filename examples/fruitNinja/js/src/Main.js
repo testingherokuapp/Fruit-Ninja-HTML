@@ -1,4 +1,5 @@
 window.onload=loadAssets;
+var stats;
 
 function loadAssets()
 {
@@ -38,14 +39,20 @@ function init()
 	
 	//particle system
 	particleSystem = new SPP.ParticleSystem();
+	particleSystem.start();
 	bladeSystem=new SPP.ParticleSystem();
+	bladeSystem.start();
 	fruitSystem=new SPP.ParticleSystem();
+	fruitSystem.start();
 	bombSystem=new SPP.ParticleSystem();
-	gravity =new SPP.Force();
-	gravity.init(0,0.15);
+	bombSystem.start();
+	gravity = new SPP.Gravity(0.15);
 	
-	//data 
-	storage = window.localStorage;
+	//data
+	if (typeof chrome.storage != "undefined")
+		storage = chrome.storage.local;
+	else
+		storage = window.localStorage
 	if(!storage.highScore)
 	storage.highScore=0;
 	gameState=GAME_READY;
@@ -54,16 +61,23 @@ function init()
 	ui_gamelifeTexture=assetsManager["gamelife-3"];
 	gameLevel=0.1;
 	
+    // fps
+    stats = new Stats();
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild( stats.domElement );
+
 	
-	particleSystem.start();
-	bladeSystem.start();
-	fruitSystem.start();
-	bombSystem.start();
-	render();
+	// Use hand tracking or mouse to control
 	topCanvas.addEventListener('mousemove', mousemove, false);
+	handtracking = new HandTracking(topCanvas.width, topCanvas.height);
+	handtracking.addEventListener('handmove', handmove);
 	
+  render();
 	enterGame();
 	
+	initControl();
 };
 function enterGame()
 {
@@ -109,7 +123,7 @@ function throwObject()
 }
 function isThrowBomb()
 {
-	var n=Math.random();
+	var n=Math.random() * 2;
 	if(n<gameLevel)return true;
 	return false;
 };
@@ -139,12 +153,11 @@ function gameOver()
 };
 function gameOverComplete()
 {
-	topCanvas.addEventListener('click', replay, false);
+	replay();
 };
 
 function replay(e)
 {
-	topCanvas.removeEventListener('click', replay, false);
 	hideGameoverUI();
 };
 
@@ -164,13 +177,19 @@ function mousemove(e) {
 	};
 	buildBladeParticle(mouse.x, mouse.y);
 };
+//hand tracking event
+function handmove(e) {
+	buildBladeParticle(e.x, e.y);
+}
 //render canvas
 function render() 
 {
 	requestAnimationFrame(render);
+  
 	topContext.clearRect(0,0,gameWidth,gameHeight);
 	middleContext.clearRect(0,0,gameWidth,gameHeight);
 	bottomContext.clearRect(0,0,gameWidth,gameHeight);
+  handtracking.tick();
 
 	showScoreTextUI();
 	fruitSystem.render();
@@ -182,4 +201,32 @@ function render()
 	collideTest();
 	levelUpdate();
 	renderTimer();
+	stats.update();
 };
+
+var GameControl = {
+  message: 'Game Control',
+  moveThreshold: 5,
+  depthThreshold: 100,
+  displayShadow: true,
+  mirror: true,
+};
+
+function initControl() {
+  var gui = new dat.GUI();
+  gui.add(GameControl, 'message');
+  gui.add(GameControl, 'moveThreshold', 0, 10).step(1.0);
+  gui.add(GameControl, 'depthThreshold', 10, 255).step(1.0).onChange(function(value) {
+    handtracking.tracker.params.depthThreshold = value;
+  });
+  gui.add(GameControl, 'displayShadow').onChange(function(value) {
+    var shadowCanvas = document.getElementById("shadow");
+    if (value)
+       shadowCanvas.style.display="block";
+    else
+       shadowCanvas.style.display="none";
+  });
+  gui.add(GameControl, 'mirror');
+  gui.close();
+};
+

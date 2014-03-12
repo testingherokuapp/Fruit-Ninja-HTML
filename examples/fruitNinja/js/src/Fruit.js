@@ -16,7 +16,8 @@ FruitGame.Fruit=function()
 	};
 	//this.onUpdate=null;
 };
-SPP.inherit(FruitGame.Fruit,SPP.Particle);
+FruitGame.Fruit.prototype = SPP.inherit(SPP.Particle.prototype);
+FruitGame.Fruit.prototype.constructor = FruitGame.Fruit;
 FruitGame.Fruit.prototype.update = function()
 {
 	this.rotation+=this.rotationStep;
