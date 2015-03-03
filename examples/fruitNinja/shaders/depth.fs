@@ -19,7 +19,7 @@ void main(void) {
   vec2 x0y0 = p / dim;
   float depth = texture2D(sampler0, x0y0).r;
 
-  if (depth < 0.13)
+  if (depth < 0.05)
     gl_FragColor = vec4(0, 0, 0, 0);
   else
     gl_FragColor = vec4(depth, depth, 0, 0);

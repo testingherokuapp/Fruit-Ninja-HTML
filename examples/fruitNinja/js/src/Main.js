@@ -72,6 +72,7 @@ function init()
 	// Use hand tracking or mouse to control
 	topCanvas.addEventListener('mousemove', mousemove, false);
 	handtracking = new HandTracking(topCanvas.width, topCanvas.height);
+  handtracking.tracker.params.simple = true;
 	handtracking.addEventListener('handmove', handmove);
 	
   render();
@@ -207,7 +208,7 @@ function render()
 var GameControl = {
   message: 'Game Control',
   moveThreshold: 5,
-  depthThreshold: 100,
+  depthThreshold: 70,
   displayShadow: true,
   mirror: true,
 };
